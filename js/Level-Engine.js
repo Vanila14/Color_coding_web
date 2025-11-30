@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressPercent = document.querySelector('.progress-percent');
 
   /* ------------------ ЗВУКИ ------------------ */
-  const clickSound = new Howl({ src: ['../../music/sounds/click.mp3'], volume: 1 });
-  const errorSound = new Howl({ src: ['../../music/sounds/error.mp3'], volume: 1 });
-  const victorySound = new Howl({ src: ['../../music/level_up.mp3'], volume: 1 });
+  const clickSound = new Howl({ src: ['/Color_coding_web/music/sounds/click.mp3'], volume: 1 });
+  const errorSound = new Howl({ src: ['/Color_coding_web/music/sounds/error.mp3'], volume: 1 });
+  const victorySound = new Howl({ src: ['/Color_coding_web/music/level_up.mp3'], volume: 1 });
 
   /* ------------------ ЗАГРУЗКА ПРОГРЕССА ------------------ */
   let saved = JSON.parse(localStorage.getItem(`level_${levelId}`)) || {};

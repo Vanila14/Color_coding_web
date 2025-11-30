@@ -14,14 +14,14 @@
     function initSoundWidget() {
 
         const tracks = [
-            "../music/Lo-Fi-1.mp3",
-            "../music/Lo-Fi-2.mp3",
-            "../music/Lo-Fi-3.mp3",
-            "../music/Lo-Fi-4.mp3",
-            "../music/Lo-Fi-5.mp3",
-            "../music/Lo-Fi-6.mp3",
-            "../music/Lo-Fi-7.mp3",
-            "../music/Lo-Fi-8.mp3"
+        "/Color_coding_web/music/Lo-Fi-1.mp3",
+        "/Color_coding_web/music/Lo-Fi-2.mp3",
+        "/Color_coding_web/music/Lo-Fi-3.mp3",
+        "/Color_coding_web/music/Lo-Fi-4.mp3",
+        "/Color_coding_web/music/Lo-Fi-5.mp3",
+        "/Color_coding_web/music/Lo-Fi-6.mp3",
+        "/Color_coding_web/music/Lo-Fi-7.mp3",
+        "/Color_coding_web/music/Lo-Fi-8.mp3"
         ];
 
         let currentTrack = 0;
@@ -105,7 +105,7 @@
             clickVolume = saved.clickVolume ?? 0.5;
         }
 
-        buttonSound = new Howl({ src: ["../music/sounds/click.mp3"], volume: clickVolume });
+        buttonSound = new Howl({ src: ["/Color_coding_web/music/sounds/click.mp3"], volume: clickVolume });
         music = createHowlFor(currentTrack, saved?.seek ?? 0, saved?.isPlaying !== false);
         if (saved && saved.isPlaying === false) setTimeout(() => music.pause(), 50);
 

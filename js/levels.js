@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try { if (clickSound) clickSound.play(); } catch (e) {}
         
         setTimeout(() => {
-          window.location.href = `pages/levels/level${n}.html`;
+          window.location.href = `./pages/levels/level${n}.html`;
         }, 120);
       });
     } else {

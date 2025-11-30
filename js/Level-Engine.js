@@ -274,7 +274,7 @@ drawTarget();
     backBtn.addEventListener("click", () => {
       clickSound.play();
       setTimeout(() => {
-        window.location.href = "/pages/levels.html";
+        window.location.href = "../../pages/levels.html";
       }, 150);
     });
   }

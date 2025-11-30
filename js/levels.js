@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEV_UNLOCK_UP_TO = 0;
 
   // звуки 
-  const clickSound = window.Howl ? new Howl({ src: ['/music/sounds/click.mp3'], volume: 1.2 }) : null;
-  const errorSound = window.Howl ? new Howl({ src: ['/music/sounds/error.mp3'], volume: 1 }) : null;
+  const clickSound = window.Howl ? new Howl({ src: ['../music/sounds/click.mp3'], volume: 1.2 }) : null;
+  const errorSound = window.Howl ? new Howl({ src: ['../music/sounds/error.mp3'], volume: 1 }) : null;
 
   const levelEls = Array.from(document.querySelectorAll('.level'));
   if (!levelEls.length) return;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try { if (clickSound) clickSound.play(); } catch (e) {}
         
         setTimeout(() => {
-          window.location.href = `/pages/levels/level${n}.html`;
+          window.location.href = `pages/levels/level${n}.html`;
         }, 120);
       });
     } else {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const transitionCircle = document.querySelector('.transition-circle');
 
     // звук клика
-    const clickSound = new Howl({ src: ['/music/sounds/click.mp3'], volume: 1.2 });
+    const clickSound = new Howl({ src: ['music/sounds/click.mp3'], volume: 1.2 });
 
     if (backBtn) {
         backBtn.addEventListener('click', () => {

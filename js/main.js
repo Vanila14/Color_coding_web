@@ -13,7 +13,7 @@ setTimeout(() => {
 
 // Загружаем звук кнопки
 const clickSound = new Howl({
-    src: ['/Color_coding_web/music/sounds/click.mp3'],
+    src: ['/music/sounds/click.mp3'],
     volume: 1.5
 });
 

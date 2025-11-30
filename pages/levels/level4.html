@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Уровень 4 | создавай фигуры</title>
+
+<!-- стили -->
+<link rel="stylesheet" href="../../css/reset.css">
+<link rel="stylesheet" href="../../css/fonts.css">
+<link rel="stylesheet" href="../../css/level.css">
+<link rel="stylesheet" href="../../css/shapes.css">
+
+
+<!-- Howler (аудио) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+</head>
+<body class="levels-body level-page">
+
+<header class="level-header">
+    <button class="btn exit-btn levels-link" title="Все уровни">← Все уровни</button>
+    <button class="btn next-btn" disabled>Следующий уровень →</button>
+</header>
+
+<main class="level-main">
+    <aside class="info-panel">
+    <h2 class="level-title">Уровень 4</h2>
+
+    <div class="progress-wrap">
+        <div class="progress-bar" aria-hidden="true">
+        <div class="progress-fill" style="width: 0%;"></div>
+        </div>
+        <div class="progress-percent">0%</div>
+    </div>
+
+    <div class="hint">
+        <h3>Пояснение:</h3>
+        <div class="hint-text">Теперь цвета по сложнее </div>
+        <button class="hint-btn">Показать подсказку</button>
+        <div class="hint-reveal" style="display:none;">
+        <div class="hint-text">
+            Желтый=красный+зеленый Голубой=зеленый+синий Розовый=красный+синий
+        </div>
+        </div>
+    </div>
+    </aside>
+
+    <section class="workspace">
+    <div class="user-field">
+        <h3>Твоя фигура</h3>
+        <div id="userShape" class="shape-area"></div>
+    </div>
+
+    <div class="target-field">
+        <h3>Загаданная фигура</h3>
+        <div id="targetShape" class="shape-area"></div>
+    </div>
+    </section>
+</main>
+
+<section class="controls">
+    <div class="layers">
+    <button class="layer-btn active" data-layer="1">1</button>
+    <button class="layer-btn" data-layer="2">2</button>
+    <button class="layer-btn" data-layer="3">3</button>
+    </div>
+
+    <div class="input-group">
+    <label>Фигура:</label>
+    <select id="figureInput" class="figure-select">
+        <option value="">— выбрать —</option>
+        <option value="круг">круг</option>
+        <option value="квадрат">квадрат</option>
+        <option value="треугольник">треугольник</option>
+        <option value="звезда">звезда</option>
+        <option value="шестиугольник">шестиугольник</option>
+        <option value="сердце">сердце</option>
+        <option value="ромб">ромб</option>
+        <option value="крест">крест</option>
+        <option value="облако">облако</option>
+        <option value="цветочик">цветочик</option>
+    </select>
+    </div>
+
+    <div class="color-inputs">
+        <label>
+        Красный:
+            <input type="range" id="r" min="0" max="255" value="0" class="color-slider red">
+            <span id="rVal" class="color-value">0</span>
+        </label>
+
+        <label>
+        Зелёный:
+            <input type="range" id="g" min="0" max="255" value="0" class="color-slider green">
+            <span id="gVal" class="color-value">0</span>
+        </label>
+
+    <label>
+        Синий:
+            <input type="range" id="b" min="0" max="255" value="0" class="color-slider blue">
+            <span id="bVal" class="color-value">0</span>
+        </label>
+    </div>
+
+    <div class="opacity-control">
+        <label>Прозрачность:
+            <input type="range" id="opacity" min="0" max="1" step="0.1" value="1" class="opacity-slider">
+        </label>
+        <span id="opacityValue" class="opacity-value">1</span>
+    </div>
+    
+    
+</section>
+
+<!-- Скрипты -->
+<script src="../../js/shapes.js"></script>
+<script src="../../js/levelsData.js"></script> 
+<script src="../../js/Level-Engine.js"></script> 
+
+
+
+<script src="/js/sound-widget.js"></script>
+<script>
+// определить номер уровня по URL
+const match = window.location.pathname.match(/level(\d+)\.html$/);
+if (match) {
+    const levelNum = Number(match[1]);
+    // пометить уровень как посещенный
+    localStorage.setItem("visited_level_" + levelNum, "1");
+}
+</script>
+</body>
+</html>

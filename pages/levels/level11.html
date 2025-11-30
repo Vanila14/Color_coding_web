@@ -1,0 +1,270 @@
+    <!doctype html>
+    <html lang="ru">
+    <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Поздравляем — все уровни пройдены!</title>
+
+    <!-- базовые стили проекта (если есть) - подключаем, но дублируем минимальную часть ниже -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/level.css">
+
+    <style>
+    /* Минимальные локальные стили (на случай, если внешние отличаются) */
+    :root{--bg:#232949;--accent:#2c9caf;--accent-2:#4facfe;--glass: rgba(255,255,255,0.08);--text:#fff}
+    html,body{height:100%;margin:0;font-family:"Comic Relief",system-ui,Segoe UI,Roboto,Arial;}
+    body{background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center;padding:30px;overflow:hidden}
+    .card{
+        position:relative;
+        width:min(980px,94vw);
+        max-width:980px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border-radius:18px;
+        padding:36px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+        backdrop-filter: blur(8px);
+        z-index:2;
+        text-align:center;
+        overflow:visible;
+    }
+
+    .title {
+        font-size: clamp(1.8rem, 3.6vw, 3rem);
+        margin: 0 0 8px 0;
+        letter-spacing:1px;
+        text-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    }
+    .subtitle {
+        margin:0 0 18px 0;
+        color: #dbefff;
+        font-size:1.05rem;
+    }
+
+    .trophy {
+        width:120px;height:120px;margin: 10px auto 16px;
+        display:grid;place-items:center;border-radius:24px;
+        background: linear-gradient(180deg,#ffd36a,#ffb74d);
+        box-shadow: 0 12px 30px rgba(255,180,50,0.15), inset 0 -6px 18px rgba(255,255,255,0.15);
+    }
+    .trophy svg{width:78px;height:78px;filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));}
+
+    .actions{display:flex;gap:12px;justify-content:center;margin-top:18px}
+    .btn {
+        padding:10px 18px;border-radius:10px;border:2px solid rgba(255,255,255,0.15);
+        background: linear-gradient(90deg,var(--accent-2),var(--accent));
+        color:#012;font-weight:700;cursor:pointer; font-size:1rem;
+        transition: transform .18s ease, box-shadow .18s ease;
+        box-shadow: 0 12px 30px rgba(44,156,175,0.12);
+    }
+    .btn:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(44,156,175,0.22); }
+
+    .secondary {
+        background: transparent;color:var(--text); border:2px solid rgba(255,255,255,0.12);
+        box-shadow:none; padding:10px 14px;
+    }
+
+    /* little sparkles behind title */
+    .sparkles {
+        position:absolute;left:50%;top:12px;transform:translateX(-50%);width:100%;height:40%;
+        pointer-events:none; z-index:1;
+    }
+
+    /* canvas full-screen confetti */
+    canvas#confetti {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* responsive */
+    @media (max-width:720px){
+        .card{padding:20px;border-radius:14px}
+        .trophy{width:96px;height:96px}
+        .title{font-size:1.6rem}
+        .actions{flex-direction:column; gap:10px}
+        .btn{width:100%}
+    }
+    </style>
+    </head>
+    <body>
+
+    <canvas id="confetti"></canvas>
+
+    <div class="card" role="main" aria-labelledby="congratsTitle">
+    
+
+    
+
+    <h1 id="congratsTitle" class="title">Поздравляем! Ты прошёл все уровни 🎉</h1>
+    <p class="subtitle">Отличная работа — ты довёл игру до конца. Спасибо, что играешь и доводишь всё до идеала.</p>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;">
+        <button id="homeBtn" class="btn">На главную</button>
+        <button id="replayBtn" class="btn secondary">Пройти заново</button>
+    </div>
+
+    </div>
+
+    <script>
+    /* ======= Confetti canvas (легкий, быстрый) =======
+    - запускается на load
+    - вспышка конфетти и тихое падение
+    - не использует внешние либы
+    */
+    (() => {
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = innerWidth;
+    let H = canvas.height = innerHeight;
+    const colors = [
+        'rgba(44,156,175,1)', // accent
+        'rgba(79,172,254,1)',
+        'rgba(255,203,107,1)',
+        'rgba(255,114,114,1)',
+        'rgba(162,102,255,1)'
+    ];
+
+    window.addEventListener('resize', () => { W = canvas.width = innerWidth; H = canvas.height = innerHeight; });
+
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    class Particle {
+        constructor(x,y,dx,dy,size,color,rot,drag) {
+        this.x=x; this.y=y; this.dx=dx; this.dy=dy;
+        this.size=size; this.color=color; this.rot=rot; this.ttl=rand(2400,4600);
+        this.birth = performance.now(); this.drag = drag||0.995; this.rvel = rand(-0.15,0.15);
+        this.shape = Math.random() < 0.5 ? 'rect' : 'circle';
+        this.opacity = 1;
+        }
+        update(dt){
+        this.dx *= this.drag;
+        this.x += this.dx * dt;
+        this.dy += 0.0015 * dt; // gravity
+        this.y += this.dy * dt;
+        this.rot += this.rvel * dt;
+        const age = performance.now() - this.birth;
+        this.opacity = Math.max(0, 1 - age / this.ttl);
+        }
+        draw(ctx){
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rot);
+        if (this.shape === 'rect') {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.65);
+        } else {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.ellipse(0,0,this.size*0.6,this.size*0.6,0,0,Math.PI*2);
+            ctx.fill();
+        }
+        ctx.restore();
+        }
+        isDead(){ return this.opacity <= 0 || this.y > H + 200; }
+    }
+
+    const particles = [];
+
+    function burst(x,y,count=40) {
+        for (let i=0;i<count;i++){
+        const angle = rand(-Math.PI, 0) + rand(-0.6,0.6);
+        const speed = rand(0.6,3.5);
+        const p = new Particle(
+            x, y,
+            Math.cos(angle)*speed * rand(0.6,1.2),
+            Math.sin(angle)*speed * rand(0.6,1.2),
+            rand(6,16),
+            colors[Math.floor(rand(0,colors.length))],
+            rand(-1,1),
+            rand(0.987,0.998)
+        );
+        particles.push(p);
+        }
+    }
+
+    // gentle continuous emission from top center
+    let lastEmit = 0;
+    function emitLoop(now) {
+        if (!lastEmit) lastEmit = now;
+        const dt = now - (emitLoop._prev||now);
+        emitLoop._prev = now;
+
+        // occasional big burst at start
+        if (now < 1800 && now > 100) {
+        // initial burst
+        burst(W*0.5, H*0.22, 80);
+        }
+
+        // gentle random spawns
+        if (Math.random() < 0.035) {
+        const x = rand(W*0.15, W*0.85);
+        burst(x, -20, Math.floor(rand(5,18)));
+        }
+
+        // update + draw
+        ctx.clearRect(0,0,W,H);
+        for (let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.update(dt);
+        p.draw(ctx);
+        if (p.isDead()) particles.splice(i,1);
+        }
+
+        requestAnimationFrame(emitLoop);
+    }
+
+    // on load run
+    requestAnimationFrame(emitLoop);
+
+    // expose quick replay
+    window.__confettiBurst = (x=W/2,y=H/4,count=60) => burst(x,y,count);
+
+    })();
+
+    /* ========= UI logic for buttons ========= */
+    document.getElementById('homeBtn').addEventListener('click', () => {
+    // небольшая анимация перед переходом
+    document.querySelector('.card').style.transform = 'scale(.98) translateY(-8px)';
+    setTimeout(() => { window.location.href = '/'; }, 220);
+    });
+
+    document.getElementById('replayBtn').addEventListener('click', () => {
+    // очистить прогресс и дать старт (если хочешь можно сбрасывать localStorage)
+    try { localStorage.clear(); } catch(e){}
+    // большой всплеск конфетти и перезагрузка уровня 1
+    if (window.__confettiBurst) window.__confettiBurst(window.innerWidth/2, window.innerHeight/3, 160);
+    setTimeout(() => { window.location.href = '/pages/levels/level1.html'; }, 900);
+    });
+
+    /* subtle sparkle field behind heading */
+    (function makeSparkles(){
+    const wrap = document.querySelector('.sparkles');
+    if(!wrap) return;
+    for(let i=0;i<18;i++){
+        const s = document.createElement('div');
+        const size = Math.random()*6 + 6;
+        s.style.position='absolute';
+        s.style.left = (10 + Math.random()*80) + '%';
+        s.style.top = (Math.random()*30) + '%';
+        s.style.width = s.style.height = size+'px';
+        s.style.background = `radial-gradient(circle, rgba(255,255,255,${0.9*Math.random()}), transparent 60%)`;
+        s.style.borderRadius='50%';
+        s.style.opacity = Math.random()*0.9;
+        s.style.transform = `scale(${0.6+Math.random()*1.4})`;
+        s.style.filter = 'blur(' + (Math.random()*4) + 'px)';
+        s.style.transition = 'transform 1.4s ease-in-out';
+        wrap.appendChild(s);
+        (function anim(el){
+        setInterval(() => {
+            el.style.transform = `scale(${0.8+Math.random()*1.6}) translateY(${(-4+Math.random()*8)}px)`;
+        }, 1200 + Math.random()*1800);
+        })(s);
+    }
+    })();
+    </script>
+
+    </body>
+    </html>

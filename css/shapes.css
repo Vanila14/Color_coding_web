@@ -1,0 +1,2 @@
+.shape-area { position: relative; width:260px; height:260px; }
+.shape-area svg.svg-shape { position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); }

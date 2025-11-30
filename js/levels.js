@@ -87,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (transitionCircle) transitionCircle.classList.add("active");
 
             setTimeout(() => {
-                window.location.href = "/";
+                window.location.href = "/Color_coding_web/index.html";
+
             }, 500);
         });
     }
